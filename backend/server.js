@@ -270,7 +270,11 @@ const GameModel = mongoose.model("GameModel", gameSchema, "games");
 
 // ===== MIDDLEWARE =====
 app.use(cors({
-  origin: ["http://127.0.0.1:5500", "http://localhost:5500"],
+  origin: [
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "https://smart-kids-jet.vercel.app"
+  ],
   credentials: true
 }));
 app.use(express.json({ limit: "10mb" }));
@@ -1321,5 +1325,5 @@ app.post("/verify-admin-otp", async (req, res) => {
 // =============================
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+ console.log(`🚀 Server running on port ${PORT}`);
 });
