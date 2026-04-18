@@ -7,7 +7,7 @@
 // CONFIG: Set your backend server URL here
 // When running locally: 'http://localhost:3000'
 // -----------------------------------------------
-const API_BASE = 'http://localhost:5000';
+const API_BASE = 'https://smart-kids-backend.onrender.com';
 // -----------------------------------------------
 // PAGE NAVIGATION HELPERS
 // -----------------------------------------------
@@ -141,7 +141,7 @@ document.getElementById("logout-btn").addEventListener("click", async function (
   const logId = localStorage.getItem("teacherLogId");
 
   if (logId) {
-    await fetch("http://localhost:5000/logout-user", {
+    await fetch("https://smart-kids-backend.onrender.com/logout-user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
