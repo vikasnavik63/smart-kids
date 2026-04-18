@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://unpkg.com/lottie-web@5.7.4/build/player/lottie.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌟 Smart Kids Learning Platform</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+  <!-- ===== HEADER / NAV ===== -->
+  <header class="site-header">
+  <div class="header-inner">
+
+    <!-- LEFT: LOGO -->
+    <div class="logo">
+      <span class="logo-icon">🌟</span>
+      <span class="logo-text">SmartKids</span>
+    </div>
+
+    <!-- CENTER: NAV -->
+    <nav class="main-nav">
+      <button class="nav-btn" data-page="home">🏠 Home</button>
+      <button class="nav-btn" data-page="role">🔐 Login</button>
+      <button id="profileBtn" class="nav-btn" style="display:none;">
+        👤 Profile
+      </button>
+    </nav>
+
+    <!-- RIGHT: SEARCH + STARS -->
+    <div class="header-right">
+
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="🔍 Search..." />
+      </div>
+
+      <div class="star-count">
+        ⭐ <span id="totalStars">0</span>
+      </div>
+
+    </div>
+
+  </div>
+</header>
+
+
+  <!-- ===== MAIN CONTENT ===== -->
+
+  <main id="app">
+
+    <section id="page-assignments" class="page">
+
+  <h1 style="text-align:center;">📚 Your Assignments</h1>
+
+  <div id="kids-assignments"></div>
+
+</section>
+<section id="page-materials" class="page">
+  <h1 style="text-align:center;">📄 Study Materials</h1>
+  <div id="study-materials"></div>
+</section>
+
+
+<section id="page-profile" class="page">
+  <div class="profile-container">
+
+    <div class="profile-card">
+
+      <!-- PROFILE IMAGE -->
+      <div class="profile-img-box">
+        <img id="profileImage" src="https://via.placeholder.com/120" alt="Profile">
+        
+        <input type="file" id="imageUpload" accept="image/*" hidden>
+        <button onclick="document.getElementById('imageUpload').click()">
+          Change Photo
+        </button>
+      </div>
+
+      <!-- USER INFO -->
+      <p><strong>Name:</strong> <span id="profileName"></span></p>
+      <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+      <p><strong>Role:</strong> <span id="profileRole"></span></p>
+
+      <button onclick="logoutUser()" class="logout-btn">
+        🚪 Logout
+      </button>
+
+    </div>
+
+  </div>
+</section>
+
+<section id="page-role" class="page active">
+  <div class="role-container">
+    <h1>Welcome to SmartKids 🎓</h1>
+    <p>Select your role</p>
+
+    <button class="role-btn student-btn" onclick="selectRole('student')">
+      👶 Student
+    </button>
+
+    <button class="role-btn teacher-btn" onclick="selectRole('teacher')">
+      👨‍🏫 Teacher
+    </button>
+
+    <button onclick="window.location.href='admin.html'" class="role-btn admin-btn premium-admin">
+  🔐 Admin 
+</button>
+    
+  </div>
+ </section>
+
+
+    <section id="page-student-auth" class="page">
+
+  <div class="login-container">
+
+    <h2 id="authTitle">Student Login</h2>
+
+    <input type="text" id="username" placeholder="Enter username">
+    <input type="password" id="password" placeholder="Enter password">
+
+    <button onclick="studentLogin()">Login</button>
+<!--goooglll-->
+     <p style="margin:15px 0;">OR</p>
+<div id="g_id_onload"
+         data-client_id="174875669687-iuekhc1gd6rf058kfp9m1f2mu60hi6a2.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse">
+    </div>
+
+    <div class="g_id_signin"></div>
+
+  </div>
+</section>
+
+
+
+    <section id="page-contact" class="page">
+  <div class="contact-container">
+
+    <h1>📩 Contact Us</h1>
+    <p>Have questions or suggestions? We'd love to hear from you! 😊</p>
+
+    <form id="contactForm">
+
+      <input type="text" id="name" placeholder="Your Name" required>
+
+      <input type="email" id="email" placeholder="Your Email" required>
+
+      <textarea id="message" placeholder="Your Message..." rows="5" required></textarea>
+
+      <button type="submit">Send Message</button>
+
+    </form>
+
+  </div>
+</section>
+
+    <section id="page-about" class="page">
+  <div class="about-container">
+
+    <h1 class="about-title">🌈 About SmartKids</h1>
+
+    <div class="about-card">
+      <p>
+        SmartKids is a fun and interactive learning platform designed especially for young children. 🎓✨
+      </p>
+
+      <p>
+        We turn learning into an exciting adventure using games 🎮, quizzes 🧠, and creative activities 🎨.
+      </p>
+
+      <p>
+        Our goal is to help kids learn happily while building strong basics in studies. 🌟
+      </p>
+
+      <p>
+        Made with ❤️ to make learning easy, fun, and smart!
+      </p>
+    </div>
+
+  </div>
+</section>
+
+    <!-- =========== MISSION PAGE =========== -->
+<section id="page-mission" class="page">
+  <div class="mission-section">
+    <h1>🌟 Our Mission</h1>
+
+    <p>
+      At SmartKids, our mission is to make learning fun, interactive, and accessible for every child. 
+      We believe that education should not feel like a burden, but an exciting journey filled with games, 
+      creativity, and discovery.
+    </p>
+
+    <p>
+      Our goal is to help young learners build strong foundations in reading, mathematics, and general awareness 
+      through engaging activities, videos, and interactive exercises.
+    </p>
+
+    <p>
+      We aim to empower both teachers and students by creating a smart platform where learning, teaching, 
+      and communication happen seamlessly.
+    </p>
+  </div>
+</section>
+
+    <!-- =========== HOME PAGE =========== -->
+    <section id="page-home" class="page">
+      <div class="hero">
+
+        <div class="hero-bubbles">
+          <span class="bubble b1">🎨</span>
+          <span class="bubble b2">📚</span>
+          <span class="bubble b3">🎵</span>
+          <span class="bubble b4">🔢</span>
+          <span class="bubble b5">🌈</span>
+          <span class="bubble b6">✏️</span>
+        </div>
+
+        <h1 class="hero-title">Welcome to<br><span class="highlight">SmartKids!</span></h1>
+        <p class="hero-sub">Learning is fun when you do it with us! 🎉</p>
+        <div class="class-cards">
+          <div class="class-card lkg-card" onclick="openClassSection('LKG','lkg')">
+            <div class="card-emoji">🌱</div>
+            <h2>LKG</h2>
+            <p>Alphabets · Numbers · Shapes · EVS</p>
+            <span class="card-btn">Let's Go!</span>
+          </div>
+         <div class="class-card ukg-card" onclick="openClassSection('UKG','ukg')">
+            <div class="card-emoji">🌿</div>
+            <h2>UKG</h2>
+            <p>Phonics · 1–100 · Addition · Nature</p>
+            <span class="card-btn">Let's Go!</span>
+          </div>
+          <div class="class-card c1-card" onclick="openClassSection('Class 1','class1')">
+            <div class="card-emoji">🌳</div>
+            <h2>Class 1</h2>
+            <p>Reading · Grammar · Maths · EVS</p>
+            <span class="card-btn">Let's Go!</span>
+          </div>
+        </div>
+      </div>
+
+     <!-- 📚 ASSIGNMENT BUTTON -->
+<div style="text-align:center; margin-top:30px;">
+  <button class="view-assignments-btn" onclick="goToPage('assignments')">
+    📚 View Assignments
+  </button>
+</div>
+
+<!-- 📄 STUDY MATERIAL BUTTON -->
+<div style="text-align:center; margin-top:20px;">
+  <button class="view-assignments-btn" onclick="goToPage('materials')">
+    📄 Study Materials
+  </button>
+</div>
+
+<!-- ===== PLAY GAMES SECTION ===== -->
+<section class="games-entry">
+  <div class="games-entry-box">
+    <h2>🎮 Fun Learning Games</h2>
+    <p>Play exciting games and learn faster with fun! 🚀</p>
+    
+    <a href="games.html" class="games-btn">
+      🎮 Play Games Now
+    </a>
+  </div>
+</section>
+
+ 
+</section>
+
+    <!-- =========== LKG PAGE =========== -->
+    <section id="page-lkg" class="page">
+      <div class="page-header lkg-header">
+        <h1>🌱 LKG – Little Learning Garden</h1>
+        <p>Tap on any topic to start learning!</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="lkg-english">📖 English & Phonics</button>
+        <button class="tab-btn" data-tab="lkg-math">🔢 Junior Maths</button>
+        <button class="tab-btn" data-tab="lkg-evs">🌍 General Awareness</button>
+        <button class="tab-btn" data-tab="lkg-games">🎮 Games & Rewards</button>
+      </div>
+
+      <!-- LKG English -->
+      <div id="lkg-english" class="tab-content active">
+        <h2 class="section-title">📖 English & Phonics</h2>
+
+        <div class="subsection">
+          <h3>🔤 Alphabet A–Z</h3>
+          <div class="alphabet-grid" id="alphabetGrid"></div>
+        </div>
+
+        <!--yt video for atoz-->
+
+        <div class="video-section">
+  <h3>Alphabet A-Z 🎵</h3>
+  <div class="video-wrap">
+    <iframe 
+      src="https://www.youtube.com/embed/ccEpTTZW34g?si=80E-uXfEHE5PyxN5"
+      title="Alphabet Song"
+      frameborder="0"
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>
+
+        <div class="subsection">
+          <h3>🍎 Phonics Sounds</h3>
+          <div class="phonics-grid" id="phonicsGrid"></div>
+        </div>
+ <!--yt video for apple to zebra-->
+        <div class="subsection">
+          <h3>🎵 Alphabet Song</h3>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/gHnWkmW6qRI?si=q1XeHi-NFhBSrYSh" title="Alphabet Song" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <h3>✏️ Tracing Worksheets</h3>
+          <div class="worksheet-grid">
+            <div class="ws-card" onclick="downloadSheet('LKG_Alphabet_Tracing')">
+              <div class="ws-icon">📄</div>
+              <p>Alphabet Tracing A–Z</p>
+              <button class="dl-btn">⬇ Download</button>
+            </div>
+            <div class="ws-card" onclick="downloadSheet('LKG_Small_Letters')">
+              <div class="ws-icon">📄</div>
+              <p>Small Letters a–z</p>
+              <button class="dl-btn">⬇ Download</button>
+            </div>
+            <div class="ws-card" onclick="downloadSheet('LKG_Phonics_Words')">
+              <div class="ws-icon">📄</div>
+              <p>Phonics Words Sheet</p>
+              <button class="dl-btn">⬇ Download</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LKG Math -->
+      <div id="lkg-math" class="tab-content">
+        <h2 class="section-title">🔢 Junior Mathematics</h2>
+
+        <div class="subsection">
+          <h3>🔢 Numbers 1–50</h3>
+          <div class="number-grid" id="numberGrid50"></div>
+        </div>
+        <!--video 1 to 50 -->
+        <div class="video-section">
+  <h3>Counting 1 to 50 🎵</h3>
+  <div class="video-wrap">
+    <iframe 
+      src="https://www.youtube.com/embed/hQSBGyWOjNs?si=JS-Mt4i644yVZxGE&amp;start=8"
+      title="Counting song"
+      frameborder="0"
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>
+
+        <div class="subsection">
+          <h3>🔷 Shapes</h3>
+          <div class="shapes-row">
+            <div class="shape-card">
+              <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#FF6B9D"/></svg>
+              <p>Circle</p>
+            </div>
+            <div class="shape-card">
+              <svg viewBox="0 0 100 100"><rect x="10" y="10" width="80" height="80" fill="#4ECDC4"/></svg>
+              <p>Square</p>
+            </div>
+            <div class="shape-card">
+              <svg viewBox="0 0 100 100"><polygon points="50,5 95,95 5,95" fill="#FFE66D"/></svg>
+              <p>Triangle</p>
+            </div>
+            <div class="shape-card">
+              <svg viewBox="0 0 100 100"><rect x="5" y="25" width="90" height="50" fill="#A29BFE"/></svg>
+              <p>Rectangle</p>
+            </div>
+            <div class="shape-card">
+              <svg viewBox="0 0 100 100"><polygon points="50,5 95,38 77,95 23,95 5,38" fill="#FD9644"/></svg>
+              <p>Pentagon</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <h3>📏 Concepts</h3>
+          <div class="concept-grid">
+            <div class="concept-card">
+              <div class="concept-visual">
+                <span style="font-size:2.5rem">🐘</span>
+                <span style="font-size:1rem">🐭</span>
+              </div>
+              <p><strong>Big</strong> vs <strong>Small</strong></p>
+            </div>
+            <div class="concept-card">
+              <div class="concept-visual">
+                <span>🍎🍎🍎🍎</span>
+                <span>🍊🍊</span>
+              </div>
+              <p><strong>More</strong> vs <strong>Less</strong></p>
+            </div>
+            <div class="concept-card">
+              <div class="concept-visual">
+                <span>👦🏠</span>
+                <span>🌲&nbsp;&nbsp;&nbsp;🌲</span>
+              </div>
+              <p><strong>Near</strong> vs <strong>Far</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LKG EVS -->
+      <div id="lkg-evs" class="tab-content">
+        <h2 class="section-title">🌍 General Awareness (EVS)</h2>
+        <div class="evs-grid">
+          <div class="evs-card" onclick="showEVS('myself')">
+            <div class="evs-icon">🙋</div>
+            <h3>About Myself</h3>
+            <p>My name, body parts, senses</p>
+          </div>
+          <div class="evs-card" onclick="showEVS('family')">
+            <div class="evs-icon">👨‍👩‍👧‍👦</div>
+            <h3>My Family</h3>
+            <p>Mother, father, siblings & more</p>
+          </div>
+          <div class="evs-card" onclick="showEVS('helpers')">
+            <div class="evs-icon">👮</div>
+            <h3>Community Helpers</h3>
+            <p>Doctor, police, teacher & more</p>
+          </div>
+          <div class="evs-card" onclick="showEVS('animals')">
+            <div class="evs-icon">🦁</div>
+            <h3>Animal Kingdom</h3>
+            <p>Domestic, wild, water animals</p>
+          </div>
+        </div>
+        <div id="evs-detail" class="evs-detail hidden"></div>
+      </div>
+
+      <!-- LKG Games -->
+      <div id="lkg-games" class="tab-content">
+        <h2 class="section-title">🎮 Games & Rewards</h2>
+        <div class="games-grid">
+          <div class="game-card" onclick="startGame('letterMatch')">
+            <div class="game-icon">🔤</div>
+            <h3>Letter Match</h3>
+            <p>Match capital to small letters!</p>
+            <button class="play-btn">▶ Play Now</button>
+          </div>
+          <div class="game-card" onclick="startGame('shapeSort')">
+            <div class="game-icon">🔷</div>
+            <h3>Shape Sorting</h3>
+            <p>Sort shapes into the right boxes!</p>
+            <button class="play-btn">▶ Play Now</button>
+          </div>
+          <div class="game-card" onclick="startGame('numberCount')">
+            <div class="game-icon">🔢</div>
+            <h3>Number Count</h3>
+            <p>Count and tap the right number!</p>
+            <button class="play-btn">▶ Play Now</button>
+          </div>
+        </div>
+
+        <!-- Game Area -->
+        <div id="game-area" class="game-area hidden"></div>
+
+        <!-- Rewards -->
+        <div class="rewards-section">
+          <h3>🏅 Your Badges</h3>
+          <div class="badges-grid" id="badgesGrid">
+            <div class="badge locked" id="badge-starter"><span>⭐</span><p>Starter</p></div>
+            <div class="badge locked" id="badge-reader"><span>📖</span><p>Reader</p></div>
+            <div class="badge locked" id="badge-mathstar"><span>🔢</span><p>Math Star</p></div>
+            <div class="badge locked" id="badge-champion"><span>🏆</span><p>Champion</p></div>
+            <div class="badge locked" id="badge-explorer"><span>🌍</span><p>Explorer</p></div>
+            <div class="badge locked" id="badge-superstar"><span>🌟</span><p>Superstar</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========== UKG PAGE =========== -->
+    <section id="page-ukg" class="page">
+      <div class="page-header ukg-header">
+        <h1>🌿 UKG – Upper Kindergarten</h1>
+        <p>Let's explore more amazing things!</p>
+      </div>
+
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="ukg-phonics">📖 Advanced Phonics</button>
+        <button class="tab-btn" data-tab="ukg-math">🔢 Numbers & Maths</button>
+        <button class="tab-btn" data-tab="ukg-evs">🌍 EVS Topics</button>
+      </div>
+
+      <!-- UKG Phonics -->
+      <div id="ukg-phonics" class="tab-content active">
+        <h2 class="section-title">📖 Advanced Phonics</h2>
+        <div class="subsection">
+          <h3>🔤 2-Letter Words (CVC Words)</h3>
+          <div class="word-grid" id="cvcGrid"></div>
+        </div>
+        <div class="subsection">
+          <h3>🎵 Phonics Song – Short Vowels</h3>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/hq3yfQnllfQ" title="Phonics Song" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="subsection">
+          <h3>✏️ Worksheets</h3>
+          <div class="worksheet-grid">
+            <div class="ws-card" onclick="downloadSheet('UKG_2Letter_Words')">
+              <div class="ws-icon">📄</div>
+              <p>2-Letter Words Practice</p>
+              <button class="dl-btn">⬇ Download</button>
+            </div>
+            <div class="ws-card" onclick="downloadSheet('UKG_Vowels')">
+              <div class="ws-icon">📄</div>
+              <p>Vowels & Consonants</p>
+              <button class="dl-btn">⬇ Download</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UKG Math -->
+      <div id="ukg-math" class="tab-content">
+        <h2 class="section-title">🔢 Numbers & Maths</h2>
+        <div class="subsection">
+          <h3>🔢 Numbers 1–100</h3>
+          <div class="number-grid" id="numberGrid100"></div>
+        </div>
+        <div class="subsection">
+          <h3>➕ Addition Basics</h3>
+          <div id="additionQuiz" class="quiz-area"></div>
+        </div>
+        <div class="subsection">
+          <h3>➖ Subtraction Basics</h3>
+          <div id="subtractionQuiz" class="quiz-area"></div>
+        </div>
+      </div>
+
+      <!-- UKG EVS -->
+      <div id="ukg-evs" class="tab-content">
+        <h2 class="section-title">🌍 EVS Topics</h2>
+        <div class="evs-grid">
+          <div class="evs-card" onclick="showUKGEVS('plants')">
+            <div class="evs-icon">🌱</div>
+            <h3>Plants Around Us</h3>
+            <p>Roots, stems, leaves, flowers</p>
+          </div>
+          <div class="evs-card" onclick="showUKGEVS('transport')">
+            <div class="evs-icon">🚗</div>
+            <h3>Means of Transport</h3>
+            <p>Land, water, air transport</p>
+          </div>
+          <div class="evs-card" onclick="showUKGEVS('seasons')">
+            <div class="evs-icon">🌤️</div>
+            <h3>Seasons</h3>
+            <p>Summer, Monsoon, Winter</p>
+          </div>
+          <div class="evs-card" onclick="showUKGEVS('weather')">
+            <div class="evs-icon">🌈</div>
+            <h3>Weather & Sky</h3>
+            <p>Sun, moon, stars, clouds</p>
+          </div>
+        </div>
+        <div id="ukg-evs-detail" class="evs-detail hidden"></div>
+      </div>
+    </section>
+
+    <!-- =========== CLASS 1 PAGE =========== -->
+    <section id="page-class1" class="page">
+      <div class="page-header c1-header">
+        <h1>🌳 Class 1 – First Grade Fun</h1>
+        <p>You're a big kid now! Let's learn big things!</p>
+      </div>
+
+      <div class="tab-bar">
+        <button class="tab-btn active" data-tab="c1-english">📖 English</button>
+        <button class="tab-btn" data-tab="c1-grammar">✏️ Grammar</button>
+        <button class="tab-btn" data-tab="c1-math">🔢 Mathematics</button>
+        <button class="tab-btn" data-tab="c1-evs">🌍 EVS</button>
+      </div>
+
+      <!-- C1 English -->
+      <div id="c1-english" class="tab-content active">
+        <h2 class="section-title">📖 Reading Short Sentences</h2>
+        <div class="subsection">
+          <h3>📗 Read Along</h3>
+          <div class="sentences-list" id="sentencesList"></div>
+        </div>
+        <div class="subsection">
+          <h3>🎵 Reading Song</h3>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/xmwRFYQ9S4M?si=HcBAwnPgN5HKcBYH" title="Reading Song" frameborder="0" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="subsection">
+          <h3>✏️ Worksheets</h3>
+          <div class="worksheet-grid">
+            <div class="ws-card" onclick="downloadSheet('C1_Sentences')">
+              <div class="ws-icon">📄</div>
+              <p>Short Sentences Reading</p>
+              <button class="dl-btn">⬇ Download</button>
+            </div>
+            <div class="ws-card" onclick="downloadSheet('C1_Comprehension')">
+              <div class="ws-icon">📄</div>
+              <p>Simple Comprehension</p>
+              <button class="dl-btn">⬇ Download</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C1 Grammar -->
+      <div id="c1-grammar" class="tab-content">
+        <h2 class="section-title">✏️ Basic Grammar</h2>
+        <div class="grammar-section">
+          <div class="grammar-card">
+            <h3>🏷️ Nouns</h3>
+            <p class="grammar-def">A noun is a <strong>name</strong> of a person, place, animal, or thing.</p>
+            <div class="examples-box">
+              <span class="example-chip">👦 Boy</span>
+              <span class="example-chip">🏫 School</span>
+              <span class="example-chip">🐕 Dog</span>
+              <span class="example-chip">🍎 Apple</span>
+              <span class="example-chip">🏠 House</span>
+              <span class="example-chip">📚 Book</span>
+            </div>
+          </div>
+          <div class="grammar-card">
+            <h3>🏃 Verbs</h3>
+            <p class="grammar-def">A verb is an <strong>action word</strong>. It tells us what someone does.</p>
+            <div class="examples-box">
+              <span class="example-chip">🏃 Run</span>
+              <span class="example-chip">😄 Smile</span>
+              <span class="example-chip">📖 Read</span>
+              <span class="example-chip">🎨 Draw</span>
+              <span class="example-chip">🍽️ Eat</span>
+              <span class="example-chip">😴 Sleep</span>
+            </div>
+          </div>
+          <div class="grammar-card">
+            <h3>📝 Practice – Noun or Verb?</h3>
+            <div id="grammarQuiz" class="quiz-area"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- C1 Math -->
+      <div id="c1-math" class="tab-content">
+        <h2 class="section-title">🔢 Mathematics</h2>
+        <div class="subsection">
+          <h3>➕ Addition</h3>
+          <div id="c1AddQuiz" class="quiz-area"></div>
+        </div>
+        <div class="subsection">
+          <h3>➖ Subtraction</h3>
+          <div id="c1SubQuiz" class="quiz-area"></div>
+        </div>
+        <div class="subsection">
+          <h3>✖️ Multiplication Tables (2 & 3)</h3>
+          <div class="tables-grid" id="tablesGrid"></div>
+        </div>
+      </div>
+
+      <!-- C1 EVS -->
+      <div id="c1-evs" class="tab-content">
+        <h2 class="section-title">🌍 EVS – Our World</h2>
+        <div class="evs-grid">
+          <div class="evs-card" onclick="showC1EVS('food')">
+            <div class="evs-icon">🍎</div>
+            <h3>Food We Eat</h3>
+            <p>Healthy food, junk food, meals</p>
+          </div>
+          <div class="evs-card" onclick="showC1EVS('water')">
+            <div class="evs-icon">💧</div>
+            <h3>Water</h3>
+            <p>Uses of water, save water</p>
+          </div>
+          <div class="evs-card" onclick="showC1EVS('animals')">
+            <div class="evs-icon">🐾</div>
+            <h3>Animals & Habitats</h3>
+            <p>Wild, domestic, water, birds</p>
+          </div>
+          <div class="evs-card" onclick="showC1EVS('environment')">
+            <div class="evs-icon">🌿</div>
+            <h3>Our Environment</h3>
+            <p>Clean earth, trees, pollution</p>
+          </div>
+        </div>
+        <div id="c1-evs-detail" class="evs-detail hidden"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== TOAST NOTIFICATION ===== -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- ===== STAR BURST OVERLAY ===== -->
+  <div id="starBurst" class="star-burst hidden">🌟</div>
+
+
+  <!-- ===== FOOTER ===== -->
+
+<footer class="site-footer">
+
+  <div class="bear-container" id="bearContainer">
+    <div id="bearAnimation"></div>
+  </div>
+
+  <!-- Background Illustration -->
+  <div class="footer-bg"></div>
+
+  <div class="footer-content">
+
+    <!-- Left Section -->
+    <div class="footer-left">
+      <h2 class="footer-title">You can help<br>shape the future</h2>
+
+      <div class="footer-brand">
+        <span class="logo-icon">🌟</span>
+        <span class="logo-text">SmartKids</span>
+      </div>
+
+      <p class="copyright">© 2026 SmartKids</p>
+      <p class="tagline">Learn smart. Grow bright.</p>
+    </div>
+
+    <!-- Middle Links -->
+    <div class="footer-links">
+      <div>
+        <a href="javascript:void(0)" onclick="goToPage('home')">Home</a>
+        <a href="javascript:void(0)" onclick="goToPage('contact')">Contact us</a>
+      </div>
+      <div>
+        <a href="#">How it works</a>
+        <a href="#">Privacy policy</a>
+      </div>
+      <div>
+        <a href="javascript:void(0)" onclick="goToPage('mission')">Our mission</a>
+        <a href="javascript:void(0)" onclick="goToPage('about')">About</a>
+      </div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="footer-right">
+     <button class="contact-btn" onclick="goToPage('contact')">
+Contact Us
+</button>
+      <div class="social-icons">
+
+  <a href="https://instagram.com/vikas__navik_" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram">
+  </a>
+
+  <a href="https://twitter.com/your_username" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter">
+  </a>
+
+  <a href="https://facebook.com/your_username" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
+  </a>
+
+
+</div>
+
+  </div>
+</footer>
+<script src="script.js"></script>
+<script src="kids.js"></script>
+</body>
+</html>

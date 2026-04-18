@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartKids — Teacher Panel</title>
+  <link rel="stylesheet" href="teacher.css" />
+  <!-- Google Fonts: Nunito for friendly, rounded feel -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Sora:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <!-- Phosphor Icons for clean icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web@2.0.3/src/index.js" defer></script>
+</head>
+<body>
+
+  <!-- ===================== LOGIN PAGE ===================== -->
+  <div id="login-page" class="page active">
+    <div class="login-bg">
+      <!-- Decorative floating blobs -->
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+
+    <div class="login-card">
+      <!-- Logo / Brand -->
+      <div class="login-brand">
+        <div class="brand-icon">🎓</div>
+        <h1>SmartKids</h1>
+        <p>Teacher Portal</p>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label for="email">USERNAME</label>
+          <div class="input-wrapper">
+            <i class="ph ph-envelope"></i>
+            <input type="email" id="email" placeholder="teacher@school.com" autocomplete="off"/>
+          </div>
+          <span class="field-error" id="email-error"></span>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <i class="ph ph-lock"></i>
+            <input type="password" id="password" placeholder="Enter your password"/>
+            <!-- Toggle password visibility -->
+            <button type="button" class="eye-btn" id="toggle-pass">
+              <i class="ph ph-eye" id="eye-icon"></i>
+            </button>
+          </div>
+          <span class="field-error" id="pass-error"></span>
+        </div>
+
+        <!-- Error message from server -->
+        <div class="alert-error" id="login-error" style="display:none;"></div>
+
+        <button type="submit" class="btn-primary" id="login-btn">
+          <span id="btn-text">Sign In</span>
+          <span id="btn-loader" class="loader" style="display:none;"></span>
+        </button>
+
+        <!-- Hint for demo -->
+        <p class="hint-text">Demo: teacher@school.com / password123</p>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ===================== DASHBOARD PAGE ===================== -->
+  <div id="dashboard-page" class="page">
+
+    <!-- ---- SIDEBAR ---- -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-emoji">🎓</span>
+        <span class="brand-name">SmartKids</span>
+      </div>
+
+      <!-- Teacher Info -->
+      <div class="teacher-info">
+        <div class="teacher-avatar">T</div>
+        <div>
+         <div class="teacher-name" id="teacherName">Teacher</div>
+<div class="teacher-role" id="teacherRole">Educator</div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-link active" data-section="home">
+          <i class="ph ph-house"></i> Dashboard
+        </a>
+        <a href="#" class="nav-link" data-section="students">
+          <i class="ph ph-student"></i> Students
+        </a>
+        <a href="#" class="nav-link" data-section="assignments">
+          <i class="ph ph-clipboard-text"></i> Assignments
+        </a>
+         <a href="#" class="nav-link" data-section="submissions">
+  <i class="ph ph-folder-open"></i> Submissions
+</a>
+        <a href="#" class="nav-link" data-section="upload">
+          <i class="ph ph-upload-simple"></i> Upload Content
+        </a>
+      
+      </nav>
+
+      <!-- Logout at bottom -->
+      <button class="logout-btn" id="logout-btn">
+        <i class="ph ph-sign-out"></i> Logout
+      </button>
+    </aside>
+
+    <!-- Mobile menu toggle -->
+    <button class="menu-toggle" id="menu-toggle">
+      <i class="ph ph-list"></i>
+    </button>
+
+    <!-- ---- MAIN CONTENT ---- -->
+    <main class="main-content">
+
+      <!-- ============ SECTION: HOME / OVERVIEW ============ -->
+      <section id="section-home" class="content-section active">
+        <div class="section-header">
+          <h2>Welcome back, <span class="highlight">Ms. Teacher!</span> 👋</h2>
+          <p class="section-subtitle">Here's what's happening in your classroom today.</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card stat-blue">
+            <div class="stat-icon">👩‍🎓</div>
+            <div class="stat-info">
+              <div class="stat-number" id="stat-students">0</div>
+              <div class="stat-label">Total Students</div>
+            </div>
+          </div>
+          <div class="stat-card stat-green">
+            <div class="stat-icon">📋</div>
+            <div class="stat-info">
+              <div class="stat-number" id="stat-assignments">0</div>
+              <div class="stat-label">Assignments Created</div>
+            </div>
+          </div>
+          <div class="stat-card stat-orange">
+            <div class="stat-icon">📚</div>
+            <div class="stat-info">
+              <div class="stat-number">3</div>
+              <div class="stat-label">Classes Active</div>
+            </div>
+          </div>
+          <div class="stat-card stat-purple">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-info">
+              <div class="stat-number">89%</div>
+              <div class="stat-label">Avg. Completion</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <h3>Quick Actions</h3>
+          <div class="action-buttons">
+            <button class="action-btn" onclick="switchSection('students')">
+              <i class="ph ph-user-plus"></i> Add Student
+            </button>
+            <button class="action-btn" onclick="switchSection('assignments')">
+              <i class="ph ph-plus-circle"></i> New Assignment
+            </button>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ============ SECTION: STUDENTS ============ -->
+      <section id="section-students" class="content-section">
+        <div class="section-header">
+          <h2>Student Management</h2>
+          <p class="section-subtitle">Add and manage your students.</p>
+        </div>
+
+        <!-- Add Student Form Card -->
+        <div class="card">
+          <h3 class="card-title"><i class="ph ph-user-plus"></i> Add New Student</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Student Name</label>
+              <div class="input-wrapper">
+                <i class="ph ph-user"></i>
+                <input type="text" id="student-name" placeholder="e.g. Aarav Sharma"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Class</label>
+              <div class="input-wrapper">
+                <i class="ph ph-book-open"></i>
+                <input type="text" id="student-class" placeholder="e.g. Class 5A"/>
+              </div>
+            </div>
+            <button class="btn-primary small" id="add-student-btn">
+              <i class="ph ph-plus"></i> Add Student
+            </button>
+          </div>
+          <div class="alert-error" id="student-error" style="display:none;"></div>
+          <div class="alert-success" id="student-success" style="display:none;"></div>
+        </div>
+
+        <!-- Student List Card -->
+        <div class="card">
+          <h3 class="card-title"><i class="ph ph-users"></i> Student List</h3>
+          <div class="table-wrapper">
+            <table class="data-table" id="students-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Class</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="students-tbody">
+                <!-- Students will be inserted here by JS -->
+              </tbody>
+            </table>
+            <div class="empty-state" id="students-empty">
+              <span>🎒</span>
+              <p>No students added yet. Add your first student above!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ============ SECTION: ASSIGNMENTS ============ -->
+      <section id="section-assignments" class="content-section">
+        <div class="section-header">
+          <h2>Assignments</h2>
+          <p class="section-subtitle">Create and manage class assignments.</p>
+        </div>
+
+        <!-- Create Assignment Form -->
+        <div class="card">
+          <h3 class="card-title"><i class="ph ph-plus-circle"></i> Create Assignment</h3>
+          <div class="form-group">
+            <label>Assignment Title</label>
+            <div class="input-wrapper">
+              <i class="ph ph-pencil"></i>
+              <input type="text" id="assignment-title" placeholder="e.g. Chapter 3 - Fractions"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description / Instructions</label>
+            <textarea id="assignment-desc" placeholder="Write instructions for students here..."></textarea>
+          </div>
+          <div class="alert-error" id="assignment-error" style="display:none;"></div>
+          <div class="alert-success" id="assignment-success" style="display:none;"></div>
+          <button class="btn-primary" id="add-assignment-btn">
+            <i class="ph ph-paper-plane-right"></i> Create Assignment
+          </button>
+        </div>
+
+        <!-- Assignment List -->
+        <div class="card">
+          <h3 class="card-title"><i class="ph ph-list-bullets"></i> All Assignments</h3>
+          <div id="assignments-list">
+            <!-- Assignment cards injected by JS -->
+          </div>
+          <div class="empty-state" id="assignments-empty">
+            <span>📋</span>
+            <p>No assignments yet. Create your first one above!</p>
+          </div>
+        </div>
+      </section>
+<!--milder-->
+<section id="section-submissions" class="content-section">
+  <div class="section-header">
+    <h2>Student Submissions</h2>
+    <p class="section-subtitle">View uploaded homework files.</p>
+  </div>
+
+  <div class="card">
+    <div id="submissions-list"></div>
+
+    <div class="empty-state" id="submissions-empty">
+      <span>📂</span>
+      <p>No submissions yet.</p>
+    </div>
+  </div>
+</section>
+
+      <!-- ============ SECTION: UPLOAD CONTENT ============ -->
+      <section id="section-upload" class="content-section">
+        <div class="section-header">
+          <h2>Upload Content</h2>
+          <p class="section-subtitle">Share study materials with your students.</p>
+        </div>
+        <div class="card upload-card">
+          <div class="upload-zone" id="upload-zone">
+            <div class="upload-icon">📁</div>
+            <p class="upload-title">Drag & Drop files here</p>
+            <p class="upload-sub">or click to browse</p>
+            <input type="file" id="file-input" hidden multiple/>
+          </div>
+          <input type="text" id="material-title" placeholder="Enter file title">
+
+<button class="btn-primary small" id="upload-material-btn">
+📤 Upload Material
+</button>
+
+<div id="materials-list"></div>
+
+<div class="empty-state" id="materials-empty">
+  <span>📚</span>
+  <p>No materials uploaded yet.</p>
+</div>
+          <div class="upload-types">
+            <span class="badge">📄 PDF</span>
+            <span class="badge">🖼️ Images</span>
+            <span class="badge">🎬 Videos</span>
+            <span class="badge">📊 Slides</span>
+          </div>
+          <p class="upload-note">Upload learning materials for students.</p>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- end dashboard-page -->
+
+
+  <!-- Load our JavaScript -->
+  <script src="teacher.js"></script>
+</body>
+</html>
