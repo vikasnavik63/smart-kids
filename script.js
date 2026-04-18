@@ -271,7 +271,7 @@ async function goToPage(page, addToHistory = true) {
   if (page === "lkg" || page === "ukg" || page === "class1") {
 
     try {
-      const res = await fetch("http://localhost:5000/get-classes");
+      const res = await fetch("https://smart-kids-backend.onrender.com/get-classes");
       const data = await res.json();
 
       const classes = data.classes || [];
@@ -904,7 +904,7 @@ async function sendContactMessage() {
     return;
   }
 //admin ko msg
-  const res = await fetch("http://localhost:5000/send-message", {
+  const res = await fetch("https://smart-kids-backend.onrender.com/send-message", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -971,7 +971,7 @@ async function studentLogin() {
   }
 
   try {
-    const res = await fetch("http://localhost:5000/student-login", {
+    const res = await fetch("https://smart-kids-backend.onrender.com/student-login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -1051,7 +1051,7 @@ function handleCredentialResponse(response) {
   console.log("TOKEN RECEIVED:", response);
   const token = response.credential;
 
-  fetch("http://localhost:5000/google-login", {
+  fetch("https://smart-kids-backend.onrender.com/google-login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -1144,7 +1144,7 @@ document.getElementById("imageUpload").addEventListener("change", function () {
 
     const user = JSON.parse(localStorage.getItem("user"));
 
-    const res = await fetch("http://localhost:5000/save-profile-image", {
+    const res = await fetch("https://smart-kids-backend.onrender.com/save-profile-image", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -1171,7 +1171,7 @@ async function logoutUser() {
     const logId = localStorage.getItem("studentLogId");
 
     if (logId) {
-      await fetch("http://localhost:5000/logout-user", {
+      await fetch("https://smart-kids-backend.onrender.com/logout-user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -1199,7 +1199,7 @@ async function saveStarsToDB() {
   if (!user || !user.email) return;
 
   try {
-    await fetch("http://localhost:5000/save-stars", {
+    await fetch("https://smart-kids-backend.onrender.com/save-stars", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -1223,7 +1223,7 @@ async function loadStarsFromDB() {
   if (!user || !user.email) return;
 
   try {
-    const res = await fetch("http://localhost:5000/get-stars", {
+    const res = await fetch("https://smart-kids-backend.onrender.com/get-stars", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -1270,7 +1270,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
 
-        const res = await fetch("http://localhost:5000/contact-message", {
+        const res = await fetch("https://smart-kids-backend.onrender.com/contact-message", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -1306,7 +1306,7 @@ document.addEventListener("DOMContentLoaded", () => {
 //inactive clas
 async function openClassSection(className, pageName) {
   try {
-    const res = await fetch("http://localhost:5000/classes-status");
+    const res = await fetch("https://smart-kids-backend.onrender.com/classes-status");
     const data = await res.json();
 
     const cls = data.classes.find(
