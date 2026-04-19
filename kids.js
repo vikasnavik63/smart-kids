@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:5000";
+const API_BASE = "https://smart-kids-backend.onrender.com";
 
 async function loadAssignmentsForKids() {
   try {
@@ -120,4 +120,3 @@ document.addEventListener("DOMContentLoaded", () => {
   loadStudyMaterials();
 });
 window.submitWork = submitWork;
-//tqqk jdvm vofr ntdk

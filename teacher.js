@@ -5,7 +5,7 @@
 
 // -----------------------------------------------
 // CONFIG: Set your backend server URL here
-// When running locally: 'http://localhost:3000'
+
 // -----------------------------------------------
 const API_BASE = 'https://smart-kids-backend.onrender.com';
 // -----------------------------------------------

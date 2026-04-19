@@ -1262,7 +1262,7 @@ async function openGame(gameId) {
   const gameName = gameMap[gameId];
 
    try {
-    const res = await fetch("http://localhost:5000/api/games");
+    const res = await fetch("https://smart-kids-backend.onrender.com/api/games");
 
     if (!res.ok) {
       alert("Backend API error");
@@ -2143,7 +2143,7 @@ async function saveGameData() {
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user) return;
 
-  await fetch("http://localhost:5000/update-game-data", {
+  await fetch("https://smart-kids-backend.onrender.com/update-game-data", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -2162,7 +2162,7 @@ async function loadStars() {
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user) return;
 
-  const res = await fetch("http://localhost:5000/get-stars", {
+  const res = await fetch("https://smart-kids-backend.onrender.com/get-stars", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

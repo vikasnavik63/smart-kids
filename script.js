@@ -1020,7 +1020,7 @@ async function studentLogin() {
 //naya mal teacher 
 
 function goToTeacher() {
-  window.location.href = "http://localhost:3000/teacher.html";
+  window.location.href = "https://smart-kids-jet.vercel.app/teacher.html";
 }
 
 function selectRole(role) {
