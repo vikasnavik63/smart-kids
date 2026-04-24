@@ -1,8 +1,13 @@
 /* =============================================
    SMART KIDS LEARNING PLATFORM – script.js
    ============================================= */
-
 "use strict";
+
+const BASE_URL =
+location.hostname === "127.0.0.1" ||
+location.hostname === "localhost"
+? "http://localhost:5000"
+: "https://smart-kids-backend.onrender.com";
 
 // ============ STATE ============
 let totalStars = 0;
@@ -245,13 +250,17 @@ document.addEventListener("DOMContentLoaded", () => {
   updateUserUI();
 
   // ✅ Load page from URL
-  const hash = window.location.hash.replace("#", "");
- if (hash) {
+const hash = window.location.hash.replace("#", "");
+
+if (hash) {
   goToPage(hash, false);
 
   if (hash === "profile") {
     loadProfileData();
   }
+
+} else {
+  goToPage("home", false); // default page
 }
 });
 
@@ -271,7 +280,7 @@ async function goToPage(page, addToHistory = true) {
   if (page === "lkg" || page === "ukg" || page === "class1") {
 
     try {
-      const res = await fetch("https://smart-kids-backend.onrender.com/get-classes");
+     const res = await fetch(`${BASE_URL}/get-classes`);
       const data = await res.json();
 
       const classes = data.classes || [];
@@ -904,7 +913,7 @@ async function sendContactMessage() {
     return;
   }
 //admin ko msg
-  const res = await fetch("https://smart-kids-backend.onrender.com/send-message", {
+   const res = await fetch(`${BASE_URL}/send-message`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -962,8 +971,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function studentLogin() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+
+  const username =
+    document.getElementById("username").value.trim();
+
+  const password =
+    document.getElementById("password").value.trim();
 
   if (!username || !password) {
     alert("Fill all fields");
@@ -971,42 +984,44 @@ async function studentLogin() {
   }
 
   try {
-    const res = await fetch("https://smart-kids-backend.onrender.com/student-login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ username, password })
-    });
+
+   const res = await fetch(
+  `${BASE_URL}/student-login`,
+  {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username,
+          password
+        })
+      }
+    );
 
     const data = await res.json();
 
     if (data.success) {
 
-  localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
 
-  if (data.logId) {
-    localStorage.setItem("studentLogId", data.logId);
-  }
+      if (data.logId) {
+        localStorage.setItem(
+          "studentLogId",
+          data.logId
+        );
+      }
 
-  updateUserUI();
-  loadStarsFromDB();
-  goToPage("home");
+      alert("✅ Login successful");
 
+      updateUserUI();
+      loadStarsFromDB();
+      goToPage("home");
 
-  // save login log id
-  if (data.logId) {
-    localStorage.setItem("studentLogId", data.logId);
-  }
-
-  alert("✅ Login successful");
-
-  updateUserUI();
-  loadStarsFromDB();
-
-  goToPage("home");
-}
-    else {
+    } else {
       alert("❌ " + data.message);
     }
 
@@ -1016,11 +1031,10 @@ async function studentLogin() {
   }
 }
 
-
 //naya mal teacher 
 
 function goToTeacher() {
-  window.location.href = "https://smart-kids-jet.vercel.app/teacher.html";
+  window.location.href = "/teacher.html";
 }
 
 function selectRole(role) {
@@ -1045,13 +1059,13 @@ function selectRole(role) {
     window.location.href = "teacher.html";
   }
 }
-//googolllll
-
+//goggol
 function handleCredentialResponse(response) {
   console.log("TOKEN RECEIVED:", response);
+
   const token = response.credential;
 
-  fetch("https://smart-kids-backend.onrender.com/google-login", {
+  fetch(`${BASE_URL}/google-login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -1060,15 +1074,28 @@ function handleCredentialResponse(response) {
   })
   .then(res => res.json())
   .then(data => {
+
     console.log("BACKEND RESPONSE:", data);
+
     if (data.success) {
 
-      localStorage.setItem("user", JSON.stringify(data.user));
-updateUserUI();
-loadStarsFromDB();
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
+
+      if (data.logId) {
+        localStorage.setItem(
+          "studentLogId",
+          data.logId
+        );
+      }
+
+      updateUserUI();
+      loadStarsFromDB();
 
       if (data.role === "teacher") {
-        window.location.href = "teacher.html";
+        window.location.href = "/teacher.html";
       } else {
         goToPage("home");
       }
@@ -1076,8 +1103,14 @@ loadStarsFromDB();
     } else {
       alert("Login failed");
     }
+
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Google login failed");
   });
 }
+
 //update fuc
 function updateUserUI() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -1144,7 +1177,7 @@ document.getElementById("imageUpload").addEventListener("change", function () {
 
     const user = JSON.parse(localStorage.getItem("user"));
 
-    const res = await fetch("https://smart-kids-backend.onrender.com/save-profile-image", {
+    const res = await fetch(`${BASE_URL}/save-profile-image`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -1166,12 +1199,11 @@ document.getElementById("imageUpload").addEventListener("change", function () {
 });
 
 async function logoutUser() {
-
   try {
     const logId = localStorage.getItem("studentLogId");
 
     if (logId) {
-      await fetch("https://smart-kids-backend.onrender.com/logout-user", {
+      await fetch(`${BASE_URL}/logout-user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -1181,11 +1213,19 @@ async function logoutUser() {
     }
 
   } catch (err) {
-    console.log(err);
+    console.log("Logout error:", err);
   }
 
+  // clear local storage
   localStorage.removeItem("studentLogId");
   localStorage.removeItem("user");
+
+  // optional google logout reset
+  if (window.google && google.accounts && google.accounts.id) {
+    google.accounts.id.disableAutoSelect();
+  }
+
+  updateUserUI();
 
   goToPage("role");
 }
@@ -1199,7 +1239,7 @@ async function saveStarsToDB() {
   if (!user || !user.email) return;
 
   try {
-    await fetch("https://smart-kids-backend.onrender.com/save-stars", {
+    await fetch(`${BASE_URL}/save-stars`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -1223,7 +1263,7 @@ async function loadStarsFromDB() {
   if (!user || !user.email) return;
 
   try {
-    const res = await fetch("https://smart-kids-backend.onrender.com/get-stars", {
+    const res = await fetch(`${BASE_URL}/get-stars`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -1270,7 +1310,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
 
-        const res = await fetch("https://smart-kids-backend.onrender.com/contact-message", {
+       const res = await fetch(`${BASE_URL}/contact-message`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -1306,7 +1346,7 @@ document.addEventListener("DOMContentLoaded", () => {
 //inactive clas
 async function openClassSection(className, pageName) {
   try {
-    const res = await fetch("https://smart-kids-backend.onrender.com/classes-status");
+   const res = await fetch(`${BASE_URL}/classes-status`);
     const data = await res.json();
 
     const cls = data.classes.find(
@@ -1328,4 +1368,70 @@ async function openClassSection(className, pageName) {
   } catch (err) {
     alert("Server error");
   }
+}
+
+//new stu
+function showSignup(event) {
+
+if(event) event.preventDefault();
+
+goToPage("student-auth");
+
+document.querySelector("#page-student-auth .login-container")
+.style.display = "none";
+
+document.getElementById("signupBox")
+.style.display = "block";
+}
+
+function hideSignup(event) {
+
+if(event) event.preventDefault();
+
+goToPage("student-auth");
+
+document.querySelector("#page-student-auth .login-container")
+.style.display = "block";
+
+document.getElementById("signupBox")
+.style.display = "none";
+}
+
+//register stu
+async function registerStudent() {
+
+const name = document.getElementById("regName").value.trim();
+const email = document.getElementById("regEmail").value.trim();
+const username = document.getElementById("regUsername").value.trim();
+const password = document.getElementById("regPassword").value.trim();
+const confirm = document.getElementById("regConfirm").value.trim();
+
+if (!name || !email || !username || !password || !confirm) {
+  alert("Fill all fields");
+  return;
+}
+
+if (password !== confirm) {
+  alert("Passwords do not match");
+  return;
+}
+
+const res = await fetch(`${BASE_URL}/student-register`, {
+method:"POST",
+headers:{ "Content-Type":"application/json" },
+body: JSON.stringify({
+name,
+email,
+username,
+password
+})
+});
+
+const data = await res.json();
+
+alert(data.message);
+
+if (data.success) {
+  hideSignup();
+}
 }

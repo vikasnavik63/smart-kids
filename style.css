@@ -1218,3 +1218,226 @@ cursor:pointer;
   50%{background-position:100% 50%;}
   100%{background-position:0% 50%;}
 }
+
+.signup-box{
+  max-width:420px;
+  margin:40px auto;
+  padding:35px;
+  background:white;
+  border-radius:22px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.12);
+}
+
+.signup-box h2{
+  text-align:center;
+  margin-bottom:20px;
+  color:#333;
+}
+
+.signup-box input{
+  width:100%;
+  padding:14px;
+  margin:10px 0;
+  border:2px solid #eee;
+  border-radius:12px;
+  font-size:16px;
+  outline:none;
+}
+
+.signup-box input:focus{
+  border-color:#6c63ff;
+}
+
+.signup-box button{
+  width:100%;
+  margin-top:15px;
+}
+
+.switch-auth{
+  text-align:center;
+  margin-top:18px;
+}
+
+.switch-auth a{
+  color:#6c63ff;
+  font-weight:700;
+  text-decoration:none;
+}
+
+/*student responsive */
+
+
+#page-student-auth{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:40px 20px;
+  background:
+  linear-gradient(135deg, rgba(108,99,255,.12), rgba(255,107,157,.12)),
+  radial-gradient(circle at top left,#ffffff,#f7f1ff,#eef9ff);
+}
+
+/* Login / Signup Box */
+#page-student-auth .login-container,
+#page-student-auth .signup-box{
+  width:100%;
+  max-width:460px;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.5);
+  border-radius:28px;
+  padding:38px 34px;
+  box-shadow:
+  0 20px 45px rgba(0,0,0,.08),
+  0 8px 18px rgba(108,99,255,.08);
+  animation:fadeUp .55s ease;
+}
+
+@keyframes fadeUp{
+  from{
+    opacity:0;
+    transform:translateY(25px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* Heading */
+#page-student-auth h2{
+  text-align:center;
+  font-size:2rem;
+  font-weight:800;
+  margin-bottom:26px;
+  color:#222;
+  letter-spacing:.3px;
+}
+
+/* Inputs */
+#page-student-auth input{
+  width:100%;
+  padding:15px 18px;
+  margin-bottom:14px;
+  border:2px solid #ececec;
+  border-radius:16px;
+  font-size:1rem;
+  background:#fff;
+  transition:.25s ease;
+  outline:none;
+  box-sizing:border-box;
+}
+
+#page-student-auth input:focus{
+  border-color:#6c63ff;
+  box-shadow:0 0 0 4px rgba(108,99,255,.12);
+  transform:translateY(-1px);
+}
+
+/* Main Buttons */
+#page-student-auth button,
+#page-student-auth .role-btn{
+  width:100%;
+  border:none;
+  padding:15px;
+  border-radius:16px;
+  font-size:1.05rem;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:6px;
+  transition:.25s ease;
+  color:#fff;
+  background:linear-gradient(135deg,#6c63ff,#8b5cf6,#ff6b9d);
+  box-shadow:0 12px 24px rgba(108,99,255,.22);
+}
+
+#page-student-auth button:hover,
+#page-student-auth .role-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 18px 28px rgba(108,99,255,.28);
+}
+
+#page-student-auth button:active{
+  transform:scale(.98);
+}
+
+/* OR Text */
+#page-student-auth p{
+  text-align:center;
+  color:#555;
+  margin:16px 0;
+  font-size:1rem;
+}
+
+/* Google Button Container */
+#page-student-auth .g_id_signin{
+  display:flex;
+  justify-content:center;
+  margin:10px 0 18px;
+}
+
+/* Links */
+#page-student-auth a{
+  color:#6c63ff;
+  font-weight:700;
+  text-decoration:none;
+  transition:.2s;
+}
+
+#page-student-auth a:hover{
+  color:#ff4f91;
+  text-decoration:underline;
+}
+
+/* Bottom Switch Text */
+#page-student-auth .switch-auth{
+  margin-top:18px;
+  text-align:center;
+  font-size:.98rem;
+}
+
+/* Mobile Responsive */
+@media (max-width:600px){
+
+  #page-student-auth{
+    padding:18px;
+  }
+
+  #page-student-auth .login-container,
+  #page-student-auth .signup-box{
+    padding:28px 22px;
+    border-radius:22px;
+  }
+
+  #page-student-auth h2{
+    font-size:1.6rem;
+  }
+
+  #page-student-auth input,
+  #page-student-auth button{
+    padding:14px;
+    font-size:.97rem;
+  }
+}
+
+/* Hide all pages by default */
+.page{
+  display:none;
+}
+
+/* Show active page only */
+.page.active{
+  display:block;
+}
+
+#page-student-auth{
+display:none;
+}
+
+#page-student-auth.active{
+display:block;
+}
+
+

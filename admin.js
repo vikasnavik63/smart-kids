@@ -5,6 +5,12 @@
 
 'use strict';
 
+const BASE_URL =
+location.hostname === "127.0.0.1" ||
+location.hostname === "localhost"
+? "http://localhost:5000"
+: "https://smart-kids-backend.onrender.com";
+
 /* ================================================================
    DEMO DATA
    ================================================================ */
@@ -59,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (isLoggedIn === "true") {
     enterDashboard();
+    loadAdminProfile();
   }
 
 });
@@ -81,7 +88,7 @@ async function handleLogin(e) {
 
   try {
 
-    const res = await fetch("https://smart-kids-backend.onrender.com/admin-login", {
+   const res = await fetch(`${BASE_URL}/admin-login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -96,9 +103,10 @@ async function handleLogin(e) {
 
     if (data.success) {
 
-      localStorage.setItem("adminLoggedIn", "true");
+   localStorage.setItem("adminLoggedIn","true");
+   localStorage.setItem("adminName", data.name);
 
-      enterDashboard();
+   enterDashboard();
 
     } else {
       errEl.textContent = data.message || "Invalid login";
@@ -363,11 +371,11 @@ async function updateDashStats() {
       msgRes,
       loginRes
     ] = await Promise.all([
-      fetch("https://smart-kids-backend.onrender.com/admin-teachers"),
-      fetch("https://smart-kids-backend.onrender.com/admin-students"),
-      fetch("https://smart-kids-backend.onrender.com/admin-messages"),
-      fetch("https://smart-kids-backend.onrender.com/login-history")
-    ]);
+  fetch(`${BASE_URL}/admin-teachers`),
+  fetch(`${BASE_URL}/admin-students`),
+  fetch(`${BASE_URL}/admin-messages`),
+  fetch(`${BASE_URL}/login-history`)
+]);
 
     const [
       teacherData,
@@ -501,7 +509,7 @@ async function addTeacher() {
     return;
   }
 
-  const res = await fetch("https://smart-kids-backend.onrender.com/add-teacher", {
+  const res = await fetch(`${BASE_URL}/add-teacher`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -528,7 +536,7 @@ async function addTeacher() {
 
 //load teacher
 async function loadTeachers() {
-  const res = await fetch("https://smart-kids-backend.onrender.com/admin-teachers");
+  const res = await fetch(`${BASE_URL}/admin-teachers`);
   const data = await res.json();
 
   const tbody = document.getElementById("teacherBody");
@@ -623,7 +631,7 @@ async function loadTeachers() {
  * Open edit teacher modal
  */
 async function editTeacher(id) {
-  const res = await fetch("https://smart-kids-backend.onrender.com/admin-teachers");
+ const res = await fetch(`${BASE_URL}/admin-teachers`);
   const data = await res.json();
 
   const teacher = data.teachers.find(t => t._id === id);
@@ -652,7 +660,7 @@ async function saveEditTeacher() {
   const password = document.getElementById("etPassword").value.trim();
   const status = document.getElementById("etStatus").value;
 
-  const res = await fetch(`https://smart-kids-backend.onrender.com/update-teacher/${id}`, {
+  const res = await fetch(`${BASE_URL}/update-teacher/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -681,7 +689,7 @@ async function saveEditTeacher() {
 async function deleteTeacher(id) {
   if (!confirm("Delete this teacher?")) return;
 
-  const res = await fetch(`https://smart-kids-backend.onrender.com/teacher/${id}`, {
+  const res = await fetch(`${BASE_URL}/teacher/${id}`, {
     method: "DELETE"
   });
 
@@ -706,7 +714,7 @@ async function renderStudents() {
 
   const tbody = document.getElementById("studentBody");
 
-  const res = await fetch("https://smart-kids-backend.onrender.com/admin-students");
+  const res = await fetch(`${BASE_URL}/admin-students`);
   const data = await res.json();
 
   const students = data.students || [];
@@ -741,7 +749,7 @@ function deleteStudent(id) {
 
   confirmDelete("Delete this student account?", async () => {
 
-    await fetch(`https://smart-kids-backend.onrender.com/delete-student/${id}`, {
+    await fetch(`${BASE_URL}/delete-student/${id}`, {
       method: "DELETE"
     });
 
@@ -765,7 +773,7 @@ async function renderLoginHistory() {
 
   const tbody = document.getElementById("loginHistoryBody");
 
-  const res = await fetch("https://smart-kids-backend.onrender.com/login-history");
+  const res = await fetch(`${BASE_URL}/login-history`);
   const data = await res.json();
 
   loginHistory = data.logs || [];
@@ -844,7 +852,7 @@ async function renderMessages() {
 
   const grid = document.getElementById("messagesGrid");
 
-  const res = await fetch("https://smart-kids-backend.onrender.com/admin-messages");
+  const res = await fetch(`${BASE_URL}/admin-messages`);
   const data = await res.json();
 
   messages = data.messages || [];
@@ -923,7 +931,7 @@ function viewMessage(index) {
 
 async function deleteMessage(id) {
 
-  await fetch(`https://smart-kids-backend.onrender.com/delete-message/${id}`, {
+  await fetch(`${BASE_URL}/delete-message/${id}`, {
     method: "DELETE"
   });
 
@@ -947,7 +955,7 @@ async function renderClasses() {
   const grid = document.getElementById("classesGrid");
   if (!grid) return;
 
-  const res = await fetch("https://smart-kids-backend.onrender.com/classes-status");
+ const res = await fetch(`${BASE_URL}/classes-status`);
   const data = await res.json();
 
   classes = data.classes || [];
@@ -987,7 +995,7 @@ async function renderClasses() {
  */
 async function toggleClass(id) {
 
-  await fetch("https://smart-kids-backend.onrender.com/toggle-class", {
+  await fetch(`${BASE_URL}/toggle-class`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -1012,7 +1020,7 @@ async function renderGames() {
   const tbody = document.getElementById("gameBody");
   if (!tbody) return;
 
-  const res = await fetch("https://smart-kids-backend.onrender.com/games-status");
+ const res = await fetch(`${BASE_URL}/games-status`);
   const data = await res.json();
 
   games = data.games || [];
@@ -1068,7 +1076,7 @@ async function renderGames() {
 // TOGGLE GAME
 async function toggleGame(id) {
 
-  await fetch("https://smart-kids-backend.onrender.com/toggle-game", {
+ await fetch(`${BASE_URL}/toggle-game`, {
     method:"POST",
     headers:{
       "Content-Type":"application/json"
@@ -1138,7 +1146,7 @@ async function loadRecentLogins() {
   const box = document.getElementById("recentLoginList");
   if (!box) return;
 
-  const res = await fetch("https://smart-kids-backend.onrender.com/login-history");
+  const res = await fetch(`${BASE_URL}/login-history`);
   const data = await res.json();
 
   const logs = (data.logs || []).slice(0, 4);
@@ -1184,7 +1192,7 @@ if(newPassword !== confirmPassword){
    return;
 }
 
-const res = await fetch("https://smart-kids-backend.onrender.com/change-admin-password",{
+const res = await fetch(`${BASE_URL}/change-admin-password`, {
 method:"POST",
 headers:{ "Content-Type":"application/json" },
 body:JSON.stringify({
@@ -1226,7 +1234,7 @@ const email =
 document.getElementById("resetEmail").value;
 
 const res = await fetch(
-"https://smart-kids-backend.onrender.com/send-admin-otp",{
+`${BASE_URL}/send-admin-otp`, {
 method:"POST",
 headers:{ "Content-Type":"application/json" },
 body:JSON.stringify({ email })
@@ -1252,7 +1260,8 @@ const otp =
 document.getElementById("otpInput").value;
 
 const res = await fetch(
-"https://smart-kids-backend.onrender.com/verify-admin-otp",{
+  `${BASE_URL}/verify-admin-otp`,
+  {
 method:"POST",
 headers:{ "Content-Type":"application/json" },
 body:JSON.stringify({ email, otp })
@@ -1289,7 +1298,8 @@ return;
 }
 
 const res = await fetch(
-"https://smart-kids-backend.onrender.com/reset-admin-password",{
+  `${BASE_URL}/reset-admin-password`,
+  {
 method:"POST",
 headers:{ "Content-Type":"application/json" },
 body:JSON.stringify({
@@ -1307,4 +1317,41 @@ if(data.success){
 closeForgotPopup();
 }
 
+}
+
+function loadAdminProfile() {
+
+  const adminName =
+    localStorage.getItem("adminName") || "Vikash Navik";
+
+  const avatar =
+    document.getElementById("adminAvatar");
+
+  const topName =
+    document.getElementById("adminNameTop");
+
+  const greet =
+    document.getElementById("adminGreeting");
+
+  topName.textContent = adminName;
+
+  avatar.textContent =
+    adminName.charAt(0).toUpperCase();
+
+  const hour = new Date().getHours();
+
+  let msg = "";
+
+  if (hour < 12) {
+    msg = "Good Morning";
+  }
+  else if (hour < 17) {
+    msg = "Good Afternoon";
+  }
+  else {
+    msg = "Good Evening";
+  }
+
+  greet.textContent =
+    `${msg}, ${adminName}! 👋`;
 }

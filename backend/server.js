@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
@@ -66,7 +67,10 @@ const upload = multer({ storage });
 const userSchema = new mongoose.Schema({
   name: String,
   email: String,
-  role: String,
+  username: String,
+  password: String,
+  role: { type: String, default: "student" },
+
   profileImage: { type: String, default: "" },
 
   totalStars: { type: Number, default: 0 },
@@ -135,19 +139,24 @@ const Submission = mongoose.model("Submission", submissionSchema, "submissions")
 const Student = mongoose.model("Student", studentSchema, "students");
 
 const teacherSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  username: String,
-  password: String,
+  name:String,
+  email:String,
+  username:String,
+  password:String,
 
-  status: {
-    type: String,
-    default: "Active"
+  profileImage:{
+    type:String,
+    default:""
   },
 
-  createdAt: {
-    type: Date,
-    default: Date.now
+  status:{
+    type:String,
+    default:"Active"
+  },
+
+  createdAt:{
+    type:Date,
+    default:Date.now
   }
 });
 
@@ -310,7 +319,7 @@ app.post("/teacher-login", async (req, res) => {
     if (teacher.status === "Inactive") {
       return res.json({
         success: false,
-        message: "You are currently disabled by admin. Contact admin."
+        message: "Your account has been disabled by admin"
       });
     }
 
@@ -328,6 +337,8 @@ app.post("/teacher-login", async (req, res) => {
     });
 
   } catch (err) {
+    console.error(err);
+
     res.status(500).json({
       success: false,
       message: "Server error"
@@ -400,52 +411,42 @@ res.json({
   });
 }
 });
-
-
-
-// 👶 STUDENT LOGIN
+//student login
 app.post("/student-login", async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    if (!username || !password) {
+    const user = await User.findOne({
+      $or: [{ username }, { email: username }]
+    });
+
+    if (!user) {
       return res.json({
         success: false,
-        message: "All fields required"
+        message: "Invalid credentials"
       });
     }
 
-    // Demo Login
-    if (username === "student" && password === "1234") {
-      await LoginHistory.updateMany(
-  {
-    userName: "Demo Student",
-    role: "Student",
-    status: "Active"
-  },
-  {
-    status: "Inactive",
-    logoutTime: new Date()
-  }
-);
+    const match = await bcrypt.compare(password, user.password);
 
-      const log = await LoginHistory.create({
-        userName: "Demo Student",
-        role: "Student",
-        loginTime: new Date(),
-        status: "Active"
-      });
-
+    if (!match) {
       return res.json({
-        success: true,
-        role: "student",
-        logId: log._id
+        success: false,
+        message: "Invalid credentials"
       });
     }
+
+    const log = await LoginHistory.create({
+      userName: user.name,
+      role: "Student",
+      loginTime: new Date(),
+      status: "Active"
+    });
 
     res.json({
-      success: false,
-      message: "Invalid student credentials"
+      success: true,
+      user,
+      logId: log._id
     });
 
   } catch (err) {
@@ -455,6 +456,7 @@ app.post("/student-login", async (req, res) => {
     });
   }
 });
+
 
 //save star 
 app.post("/save-stars", async (req, res) => {
@@ -883,7 +885,8 @@ app.post("/admin-login", async (req, res) => {
   if (admin) {
     return res.json({
       success: true,
-      role: "admin"
+      role: "admin",
+      name: "Vikash Navik"
     });
   }
 
@@ -1316,6 +1319,72 @@ app.post("/verify-admin-otp", async (req, res) => {
     message: "OTP Verified"
   });
 
+});
+//new stu
+app.post("/student-register", async (req, res) => {
+  try {
+    const { name, email, username, password } = req.body;
+
+    if (!name || !email || !username || !password) {
+      return res.json({ success: false, message: "All fields required" });
+    }
+
+    const existingUser = await User.findOne({
+      $or: [{ email }, { username }]
+    });
+
+    if (existingUser) {
+      return res.json({
+        success: false,
+        message: "Email or username already exists"
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await User.create({
+      name,
+      email,
+      username,
+      password: hashedPassword,
+      role: "student"
+    });
+
+    res.json({
+      success: true,
+      message: "Account created successfully"
+    });
+
+  } catch (err) {
+    res.json({
+      success: false,
+      message: "Server error"
+    });
+  }
+});
+
+//teacher profile
+app.post("/teacher-upload-image", upload.single("image"), async (req, res) => {
+  try {
+    const { username } = req.body;
+
+    const filePath = "/uploads/" + req.file.filename;
+
+    await Teacher.updateOne(
+      { username },
+      { profileImage: filePath }
+    );
+
+    res.json({
+      success: true,
+      image: filePath
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success:false
+    });
+  }
 });
 
 

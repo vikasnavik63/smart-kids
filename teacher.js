@@ -7,7 +7,11 @@
 // CONFIG: Set your backend server URL here
 
 // -----------------------------------------------
-const API_BASE = 'https://smart-kids-backend.onrender.com';
+const API_BASE =
+location.hostname === "127.0.0.1" ||
+location.hostname === "localhost"
+? "http://localhost:5000"
+: "https://smart-kids-backend.onrender.com";
 // -----------------------------------------------
 // PAGE NAVIGATION HELPERS
 // -----------------------------------------------
@@ -109,12 +113,25 @@ document.getElementById('login-form').addEventListener('submit', async function 
   localStorage.setItem("teacher", JSON.stringify(data.teacher));
   localStorage.setItem("teacherLogId", data.logId);
 
+  document.getElementById("teacherName").textContent =
+    data.teacher.name;
+
+  document.getElementById("teacherRole").textContent =
+    "Teacher";
+
+  document.getElementById("welcomeTeacher").textContent =
+    `Welcome back, ${data.teacher.name}! 👋`;
+
+  loadTeacherProfileImage();
+
   showPage("dashboard-page");
+
   updateStats();
   loadStudents();
   loadAssignments();
   loadSubmissions();
   loadMaterials();
+
 }
 
  else {
@@ -141,7 +158,7 @@ document.getElementById("logout-btn").addEventListener("click", async function (
   const logId = localStorage.getItem("teacherLogId");
 
   if (logId) {
-    await fetch("https://smart-kids-backend.onrender.com/logout-user", {
+    await fetch(`${API_BASE}/logout-user`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -470,19 +487,25 @@ function escapeHTML(str) {
 // 🚀 INIT — Run when page loads
 // -----------------------------------------------
 
-
 document.addEventListener("DOMContentLoaded", () => {
-
   const saved = localStorage.getItem("teacher");
 
-  if (saved) {
+  if (!saved) {
+    showPage("login-page");
+    return;
+  }
 
+  try {
     const teacher = JSON.parse(saved);
 
     showPage("dashboard-page");
 
     document.getElementById("teacherName").textContent = teacher.name;
     document.getElementById("teacherRole").textContent = "Teacher";
+    document.getElementById("welcomeTeacher").textContent =
+      `Welcome back, ${teacher.name}! 👋`;
+
+    loadTeacherProfileImage();
 
     loadStudents();
     loadAssignments();
@@ -490,11 +513,12 @@ document.addEventListener("DOMContentLoaded", () => {
     loadMaterials();
     updateStats();
 
-  } else {
+  } catch (err) {
+    localStorage.removeItem("teacher");
     showPage("login-page");
   }
-
 });
+
 //ass
 async function loadAssignments() {
   try {
@@ -707,6 +731,67 @@ async function deleteMaterial(id) {
 
   } catch (err) {
     alert("Server error");
+  }
+}
+//teacher prof
+async function uploadTeacherImage() {
+  try {
+    const file = document.getElementById("teacherImageInput").files[0];
+    if (!file) return;
+
+    const teacher = JSON.parse(localStorage.getItem("teacher"));
+    if (!teacher) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("username", teacher.username);
+
+    const res = await fetch(`${API_BASE}/teacher-upload-image`, {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      teacher.profileImage = data.image;
+      localStorage.setItem("teacher", JSON.stringify(teacher));
+      loadTeacherProfileImage();
+    }
+
+  } catch (err) {
+    console.log(err);
+  }
+}
+//prof
+function loadTeacherProfileImage() {
+
+  const teacher =
+    JSON.parse(localStorage.getItem("teacher"));
+
+  if (!teacher) return;
+
+  const img =
+   document.getElementById("teacherAvatar")
+
+  const letter =
+    document.getElementById("teacherLetter");
+
+  if (teacher.profileImage) {
+
+    img.src =
+      API_BASE + teacher.profileImage + "?t=" + Date.now();
+
+    img.style.display = "block";
+    letter.style.display = "none";
+
+  } else {
+
+    img.style.display = "none";
+
+    letter.style.display = "flex";
+    letter.textContent =
+      teacher.name.charAt(0).toUpperCase();
   }
 }
 window.deleteMaterial = deleteMaterial;

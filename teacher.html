@@ -79,7 +79,22 @@
 
       <!-- Teacher Info -->
       <div class="teacher-info">
-        <div class="teacher-avatar">T</div>
+        <div class="avatar-box" onclick="document.getElementById('teacherImageInput').click()">
+
+  <img id="teacherAvatar" src="" />
+
+  <span id="teacherLetter">T</span>
+
+  <input
+    type="file"
+    id="teacherImageInput"
+    hidden
+    accept="image/*"
+    onchange="uploadTeacherImage()"
+  >
+
+</div>
+
         <div>
          <div class="teacher-name" id="teacherName">Teacher</div>
 <div class="teacher-role" id="teacherRole">Educator</div>
@@ -123,7 +138,7 @@
       <!-- ============ SECTION: HOME / OVERVIEW ============ -->
       <section id="section-home" class="content-section active">
         <div class="section-header">
-          <h2>Welcome back, <span class="highlight">Ms. Teacher!</span> 👋</h2>
+          <h1 id="welcomeTeacher">Welcome back! 👋</h1>
           <p class="section-subtitle">Here's what's happening in your classroom today.</p>
         </div>
 

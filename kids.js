@@ -1,4 +1,8 @@
-const API_BASE = "https://smart-kids-backend.onrender.com";
+const API_BASE =
+location.hostname === "127.0.0.1" ||
+location.hostname === "localhost"
+? "http://localhost:5000"
+: "https://smart-kids-backend.onrender.com";
 
 async function loadAssignmentsForKids() {
   try {

@@ -768,3 +768,61 @@ textarea:focus {
 .assignment-desc {
   white-space: pre-line;
 }
+
+.avatar-box{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  overflow:hidden;
+  cursor:pointer;
+  position:relative;
+  background:linear-gradient(135deg,#7c3aed,#ec4899);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.avatar-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+  display:none;
+}
+
+#teacherLetter{
+  color:white;
+  font-size:28px;
+  font-weight:800;
+}
+
+.avatar-box:hover{
+  transform:scale(1.05);
+  transition:0.3s;
+}
+
+.teacher-avatar-box{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  overflow:hidden;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(45deg,#7b61ff,#ff4da6);
+}
+
+#teacherAvatarImg{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
+
+#teacherLetter{
+  color:white;
+  font-size:32px;
+  font-weight:700;
+}

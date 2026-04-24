@@ -93,7 +93,7 @@
   </div>
 </section>
 
-<section id="page-role" class="page active">
+<section id="page-role" class="page">
   <div class="role-container">
     <h1>Welcome to SmartKids 🎓</h1>
     <p>Select your role</p>
@@ -113,28 +113,56 @@
   </div>
  </section>
 
+<section id="page-student-auth" class="page">
 
-    <section id="page-student-auth" class="page">
+<div class="login-container">
 
-  <div class="login-container">
+<h2 id="authTitle">Student Login</h2>
 
-    <h2 id="authTitle">Student Login</h2>
+<input type="text" id="username" placeholder="Username or Email">
+<input type="password" id="password" placeholder="Password">
 
-    <input type="text" id="username" placeholder="Enter username">
-    <input type="password" id="password" placeholder="Enter password">
+<button onclick="studentLogin()">Login</button>
 
-    <button onclick="studentLogin()">Login</button>
-<!--goooglll-->
-     <p style="margin:15px 0;">OR</p>
+<p style="margin:15px 0;">OR</p>
+
 <div id="g_id_onload"
-         data-client_id="174875669687-iuekhc1gd6rf058kfp9m1f2mu60hi6a2.apps.googleusercontent.com"
-         data-callback="handleCredentialResponse">
-    </div>
+data-client_id="174875669687-iuekhc1gd6rf058kfp9m1f2mu60hi6a2.apps.googleusercontent.com"
+data-callback="handleCredentialResponse">
+</div>
 
-    <div class="g_id_signin"></div>
+<div class="g_id_signin"></div>
 
-  </div>
+<p style="margin-top:15px;">
+Don't have an account?
+<a href="#" onclick="showSignup(event)">Create Account</a>
+</p>
+
+</div>
+<!-- SIGNUP BOX -->
+<div id="signupBox" class="login-container signup-box" style="display:none;">
+
+<h2>Create Account 🎓</h2>
+
+<input type="text" id="regName" placeholder="👤 Full Name">
+<input type="email" id="regEmail" placeholder="📧 Email">
+<input type="text" id="regUsername" placeholder="🆔 Username">
+<input type="password" id="regPassword" placeholder="🔒 Password">
+<input type="password" id="regConfirm" placeholder="🔐 Confirm Password">
+
+<button class="role-btn student-btn" onclick="registerStudent()">
+Create Account
+</button>
+
+<p class="switch-auth">
+Already have account?
+<a href="#" onclick="hideSignup(event)">Login</a>
+</p>
+
+</div>
+
 </section>
+
 
 
 
@@ -780,6 +808,7 @@ Contact Us
 
   </div>
 </footer>
+
 <script src="script.js"></script>
 <script src="kids.js"></script>
 </body>

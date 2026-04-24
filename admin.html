@@ -128,9 +128,9 @@
             </div>
           </div>
           <div class="admin-profile" onclick="toggleProfileMenu()">
-            <div class="profile-avatar">A</div>
+            <div class="profile-avatar" id="adminAvatar">A</div>
             <div class="profile-info">
-              <span class="profile-name">Vikash Navik</span>
+              <span class="profile-name" id="adminNameTop">Admin</span>
               <span class="profile-role"> Admin</span>
             </div>
             <i class="fas fa-chevron-down"></i>
@@ -148,7 +148,7 @@
         <!-- ===== DASHBOARD SECTION ===== -->
         <section id="sec-dashboard" class="section active">
           <div class="section-header">
-            <h2>Welcome back, Admin! 👋</h2>
+           <h2 id="adminGreeting"></h2>
             <p>Here's what's happening on the platform today.</p>
           </div>
 
